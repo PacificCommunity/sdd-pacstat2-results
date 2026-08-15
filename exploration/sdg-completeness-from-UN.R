@@ -18,15 +18,8 @@
 
 #================functionality==============
 
-library(tidyverse)
-library(glue)
-library(janitor)
+source("setup.R")
 library(readxl)
-library(countrycode)
-library(rsdmx)
-library(scales)
-library(ggrepel)
-library(spcstyle)
 
 #==========Data import aand wrangling=======
 
