@@ -25,15 +25,91 @@
 # counting starts at #2 so #1 can be the SDGs (separate script)
 
 #------------2. Number people resident------------
+#
+# We have a number for this of course in the poulation projections, but the
+# intent behind this indicator is to count the actual numbers reported by the
+# NSO, not modelled by the UN. In the absence of anything of this sort in
+# PDH.Stat that I can find we report nothing on this (hopefully will fix this by
+# creating standard census values)
+
+census_pop <- tibble()
 
 #------------3. People with disabilities------------
+disability_pdh <- readSDMX(
+  providerId = "PDH",
+  resource = "data",
+  flowRef = "DF_DISABILITY"
+) |>
+  as_tibble() |>
+  clean_names() |>
+  filter(geo_pict %in% ida_picts)
 
-#-----------4. participating labour force------
+# the data from PDH is large (90,000 observations) because so many different
+# cut-offs, etc. we only care about the numer of combinations of country, time,
+# sex, age and urbanisation; not that there is a vector of values for each some
+# combination
+disability <- disability_pdh |>
+  distinct(geo_pict, freq, sex, age, urbanization, obs_time)
 
-#-----------5. births-----------------
+# 756 observations in Auygust 2026
+nrow(disability)
 
+#-----------4. participating labour force, employed, etc------
+#
+# this is very week at the moment. dataflow below has unemployment and
+# participation rate and seems to be the only one in PDH (even though could get
+# these from HIES too). Latest observation is 2021.
+labour_stats <- readSDMX(
+  providerId = "PDH",
+  resource = "data",
+  flowRef = "DF_EMPRATES"
+) |>
+  as_tibble() |>
+  clean_names() |>
+  filter(geo_pict %in% ida_picts) |>
+  distinct(freq, geo_pict, indicator, sex, age, urbanization)
+
+# 602 observations as at August 2026
+nrow(labour_stats)
+
+#-----------5. births and deaths----------------- We have a couple of sources of
+# these
+# -  'health indicators from the DHS'
+# - 'Vital statistics'
+#
+# Spirit of PacStat2 we would count them both, because the whole point is to be
+# agnostic about where the data come from but choose the best, most frequent
+# source (so set up incentive to replace expensive surveys with cheaper admin
+# data)
+
+# data quality is very poor in this series, but that's another matter doesn't
+# actually give number of births and deaths but does have crude birth rate and
+# crude death rate, which we will treat as good enough for our purposes
+vital_stats <- readSDMX(
+  providerId = "PDH",
+  resource = "data",
+  flowRef = "DF_VITAL"
+) |>
+  as_tibble() |>
+  clean_names() |>
+  filter(indicator %in% c("CBR", "CDR"), geo_pict %in% ida_picts) |>
+  distinct(freq, geo_pict, indicator, sex, obs_time)
+
+# 198 observations at August 2026
+nrow(vital_stats)
+
+# only one indicator relevant in the DHS set so we specifically download that one only
+dhs_cbr <- readSDMX(
+  "https://stats-sdmx-disseminate.pacificdata.org/rest/data/SPC,DF_HEALTH,1.0/A...FER_05..?dimensionAtObservation=AllDimensions"
+) |>
+  as_tibble()
+
+# 10 observations at August 2026
+nrow(dhs_cbr)
 #--------------6. migrant arrivals and departures-----------
 # No data available on this in PDH.Stat
+
+migrants <- tibble()
 
 #-------------7. tourists---------------
 #
@@ -48,12 +124,11 @@ visitors <- readSDMX(
 ) |>
   as_tibble() |>
   clean_names() |>
-  # only our series of interest and countries of interest. Note that ida_picts
-  # is defined in a script in the /R/ folder and is the ISO2 codes for PICTs
-  # that are members of IDA, the World bank soft loan arm:
-  filter(geo_pict %in% ida_picts)
+  filter(geo_pict %in% ida_picts) |>
+  # only counting total numbers, don't want to give extra points for extra granularity
+  distinct(freq, geo_pict, obs_time)
 
-# 304 observations in August 2026. An easy way to increase this would be to
+# 198 observations in August 2026. An easy way to increase this would be to
 # include monthly data, as indeed we should.
 nrow(visitors)
 
@@ -71,10 +146,9 @@ remittances <- readSDMX(
 ) |>
   as_tibble() |>
   clean_names() |>
-  # only our series of interest and countries of interest. Note that ida_picts
-  # is defined in a script in the /R/ folder and is the ISO2 codes for PICTs
-  # that are members of IDA, the World bank soft loan arm:
-  filter(series == "BX_TRF_PWKR", ref_area %in% ida_picts)
+  filter(series == "BX_TRF_PWKR", ref_area %in% ida_picts) |>
+  # we don't care about occupation, custom breakdown and so on
+  distinct(freq, ref_area, sex, age, obs_time)
 
 # note this counts twice, once for in units and once as % of GDP. this is ok as
 # these are indeed two separate things and knowing one doesn't automatically
@@ -84,6 +158,23 @@ remittances <- readSDMX(
 nrow(remittances)
 
 #------------------9.employment by industry-------------
+
+employment_pdh <- readSDMX(
+  providerId = "PDH",
+  resource = "data",
+  flowRef = "DF_EMPLOYED"
+) |>
+  as_tibble() |>
+  clean_names() |>
+  filter(geo_pict %in% ida_picts)
+
+# there are lots of extra breakdowns we don't want to count eg disability,
+# education, occupation, so we just want the following unique combos:
+employment <- employment_pdh |>
+  distinct(geo_pict, freq, economic_sector, obs_time)
+
+# 269 observations August 2026:
+nrow(employment)
 
 #-------------------10. CPI by division-------------
 cpi <- readSDMX(
