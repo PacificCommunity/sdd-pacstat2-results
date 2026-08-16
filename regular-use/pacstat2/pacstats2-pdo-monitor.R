@@ -22,10 +22,10 @@
 source("setup.R")
 
 # Coverage of the relevant SDGs:
-source("regular-use/sdg-coverage.R")
+source("regular-use/pacstat2/sdg-coverage.R")
 
 # Coverage of the other statistics:
-source("regular-use/pacstat-non-sdgs-coverage.R")
+source("regular-use/pacstat2/pacstat-non-sdgs-coverage.R")
 
 # Make a summary table of the number of observations as now:
 latest_update <- tribble(
