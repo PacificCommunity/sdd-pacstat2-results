@@ -51,9 +51,6 @@ disability_pdh <- readSDMX(
 disability <- disability_pdh |>
   distinct(geo_pict, freq, sex, age, urbanization, obs_time)
 
-# 756 observations in Auygust 2026
-nrow(disability)
-
 #-----------4. participating labour force, employed, etc------
 #
 # this is very week at the moment. dataflow below has unemployment and
@@ -68,9 +65,6 @@ labour_stats <- readSDMX(
   clean_names() |>
   filter(geo_pict %in% ida_picts) |>
   distinct(freq, geo_pict, indicator, sex, age, urbanization)
-
-# 602 observations as at August 2026
-nrow(labour_stats)
 
 #-----------5. births and deaths----------------- We have a couple of sources of
 # these
@@ -95,8 +89,6 @@ vital_stats <- readSDMX(
   filter(indicator %in% c("CBR", "CDR"), geo_pict %in% ida_picts) |>
   distinct(freq, geo_pict, indicator, sex, obs_time)
 
-# 198 observations at August 2026
-nrow(vital_stats)
 
 # only one indicator relevant in the DHS set so we specifically download that one only
 dhs_cbr <- readSDMX(
@@ -104,8 +96,6 @@ dhs_cbr <- readSDMX(
 ) |>
   as_tibble()
 
-# 10 observations at August 2026
-nrow(dhs_cbr)
 #--------------6. migrant arrivals and departures-----------
 # No data available on this in PDH.Stat
 
@@ -128,10 +118,6 @@ visitors <- readSDMX(
   # only counting total numbers, don't want to give extra points for extra granularity
   distinct(freq, geo_pict, obs_time)
 
-# 198 observations in August 2026. An easy way to increase this would be to
-# include monthly data, as indeed we should.
-nrow(visitors)
-
 
 #-----------------8. remittances----------------
 #
@@ -150,13 +136,6 @@ remittances <- readSDMX(
   # we don't care about occupation, custom breakdown and so on
   distinct(freq, ref_area, sex, age, obs_time)
 
-# note this counts twice, once for in units and once as % of GDP. this is ok as
-# these are indeed two separate things and knowing one doesn't automatically
-# give you the other (some difficult conversion decisions needed)
-
-# 214 observations August 2026
-nrow(remittances)
-
 #------------------9.employment by industry-------------
 
 employment_pdh <- readSDMX(
@@ -173,9 +152,6 @@ employment_pdh <- readSDMX(
 employment <- employment_pdh |>
   distinct(geo_pict, freq, economic_sector, obs_time)
 
-# 269 observations August 2026:
-nrow(employment)
-
 #-------------------10. CPI by division-------------
 cpi <- readSDMX(
   providerId = "PDH",
@@ -187,6 +163,3 @@ cpi <- readSDMX(
   filter(geo_pict %in% ida_picts) |>
   # excluding PERCENT because it is not really an additional observation
   filter(unit_measure == "INDEX")
-
-# 3566 observations August 2026
-nrow(cpi)
