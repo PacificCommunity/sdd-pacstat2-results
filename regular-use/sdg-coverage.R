@@ -89,22 +89,6 @@ stopifnot(
     0
 )
 
-#---------------Define PICTs of interest-----------
-
-# 10 PICTs that are members of IDA
-ida_picts <- c(
-  "FM", # Federated States of Micronesia
-  "FJ", # Fiji
-  "KI", # Kiribati
-  "MH", # Marshall Islands
-  "PG", # Papua New Guinea
-  "WS", # Samoa
-  "SB", # Solomon Islands
-  "TO", # Tonga
-  "TV", # Tuvalu
-  "VU" # Vanuatu
-)
-stopifnot(length(ida_picts) == 10)
 
 #---------------------------Download data--------
 df_of_interest <- paste0("DF_SDG_", sprintf("%02d", c(1:10, 16, 17)))
@@ -126,7 +110,9 @@ for (i in 1:length(df_of_interest)) {
   ) |>
     as_tibble() |>
     clean_names() |>
-    # only our series of interest and countries of interest:
+    # only our series of interest and countries of interest. Note that ida_picts
+    # is defined in a script in the /R/ folder and is the ISO2 codes for PICTs
+    # that are members of IDA, the World bank soft loan arm:
     filter(series %in% series_of_interest, ref_area %in% ida_picts)
 }
 
