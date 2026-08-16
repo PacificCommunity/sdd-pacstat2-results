@@ -17,7 +17,7 @@ metadata <- readSDMX(
 # Get the codelists slot from the codelists slot from this very complex XML object...
 codelists <- metadata@codelists@codelists
 
-# find the codelist for CL_SERIES in particular:
+# find the codelist for CL_SERIES in particular (turns out to be '10'):
 this_codelist <- codelists[[match(
   "CL_SERIES",
   sapply(codelists, function(x) {
@@ -31,18 +31,49 @@ this_codelist <- codelists[[match(
 series_lookup <- lapply(this_codelist@Code, function(this_item) {
   tibble(id = this_item@id, label = this_item@label$en)
 }) |>
+  # collapse all of these into a single tibble with 850 or so rows:
   bind_rows() |>
   # get the SDG indicator number eg 1.2.1 from out of the square brackets into its own
   mutate(
-    indicator_code = stringr::str_extract(
-      label,
-      "(?<=\\[)\\d+(?:\\.\\d+)+(?=\\])"
+    indicator_codes = stringr::str_remove_all(
+      stringr::str_extract(label, "\\[[^]]+\\]"),
+      "\\[|\\]"
     )
   ) |>
+  # some SERIES have multiple indicators e.g. 4.7.1, 12.8.1, 13.3.1
+  mutate(indicator_codes = str_remove_all(indicator_codes, " ")) |>
+  separate(
+    indicator_codes,
+    sep = ",",
+    into = c("indicator_code_a", "indicator_code_b", "indicator_code_c"),
+    fill = "right",
+    remove = FALSE
+  ) |>
   #indicate whether or not this is one of the PICT priority indicators
-  mutate(pict_priority = indicator_code %in% pict_sdg_priorities)
+  mutate(
+    pict_priority = indicator_code_a %in%
+      pict_sdg_priorities |
+      indicator_code_b %in% pict_sdg_priorities |
+      indicator_code_c %in% pict_sdg_priorities
+  )
+
+# Which ones in our list of PICT priorities are missing from this codelist?
+# number rows below should be zero
+stopifnot(
+  pict_sdg_priorities[
+    !pict_sdg_priorities %in%
+      unique(c(
+        filter(series_lookup, pict_priority)$indicator_code_a,
+        filter(series_lookup, pict_priority)$indicator_code_b,
+        filter(series_lookup, pict_priority)$indicator_code_c
+      ))
+  ] |>
+    nrow() ==
+    0
+)
 
 
+View(series_lookup)
 # 10 PICTs that are members of IDA
 ida_picts <- c(
   "FM", # Federated States of Micronesia
