@@ -6,6 +6,7 @@
 
 # The relevant core statistics are "SDGs 1 to 10, 16 & 17.19.2 and which are
 # reported by country"
+source("setup.R")
 
 options(timeout = 300) # 5 minutes
 
@@ -79,7 +80,7 @@ write_csv(series_lookup_l, "output/sdg_series_pacstat_lookup.csv")
 
 
 # Which ones in our list of PICT priorities are missing from this codelist?
-# number rows below should be zero
+# number rows below should be zero:
 stopifnot(
   pict_sdg_priorities[
     !pict_sdg_priorities %in%
@@ -91,6 +92,9 @@ stopifnot(
 
 
 #---------------------------Download data--------
+#
+# Only a certain list of the SDGs are in scope for PacStat, defined in the
+# Project Paper:
 df_of_interest <- paste0("DF_SDG_", sprintf("%02d", c(1:10, 16, 17)))
 
 # Vector of the SERIES codes of just those of interest to PacStat
@@ -100,8 +104,11 @@ series_of_interest <- series_lookup_l |>
   pull(series_id) |>
   unique()
 
+# an empty list in which we are going to store the downloaded data from PDH.Stat
 sdgs_list <- list()
 
+# Download each dataflow one at a time and store the indicators and country
+# values that are relevant for us
 for (i in 1:length(df_of_interest)) {
   sdgs_list[[i]] <- readSDMX(
     providerId = "PDH",
@@ -116,7 +123,10 @@ for (i in 1:length(df_of_interest)) {
     filter(series %in% series_of_interest, ref_area %in% ida_picts)
 }
 
+# Combine into a single tibble:
 sdgs <- bind_rows(sdgs_list) |>
+  # convert ISO2 codes for PICTs into their names for use later in graphics
+  # etc:
   mutate(
     country = countrycode(
       ref_area,
@@ -125,11 +135,12 @@ sdgs <- bind_rows(sdgs_list) |>
     )
   )
 
-# we expect no NAs
+# we expect no NAs, so let's just check"
 stopifnot(
   nrow(filter(sdgs, is.na(obs_value))) == 0
 )
 #================Analysis and presentation==============
+# Various ways we might use this; for now these are more illustrative.
 
 # Key number - how many observations?
 nrow(sdgs)
