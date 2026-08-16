@@ -4,10 +4,13 @@
 # composite breakdowns, for IDA countries, that are available in a regional
 # dissemination platform"
 
+# The relevant core statistics are "SDGs 1 to 10, 16 & 17.19.2 and which are
+# reported by country"
+
 options(timeout = 300) # 5 minutes
 
 #------------Get the SDG series metadata---------------
-# This seems really clunky but was the best I could come up with
+# This seems really clunky but was the best way I could come up with
 
 # Get all the metadata from one of hte SDGs in PDH, doesn't matter which SDG:
 metadata <- readSDMX(
@@ -29,7 +32,7 @@ this_codelist <- codelists[[match(
 # SERIES code, we can extract the name and label from these that we need:
 # the @Code slot in each
 series_lookup <- lapply(this_codelist@Code, function(this_item) {
-  tibble(id = this_item@id, label = this_item@label$en)
+  tibble(series_id = this_item@id, label = this_item@label$en)
 }) |>
   # collapse all of these into a single tibble with 850 or so rows:
   bind_rows() |>
@@ -49,7 +52,8 @@ series_lookup <- lapply(this_codelist@Code, function(this_item) {
     fill = "right",
     remove = FALSE
   ) |>
-  #indicate whether or not this is one of the PICT priority indicators
+  #indicate whether or not this is one of the PICT priority indicators. Note the
+  #vector pict_sdg_priorities is defined in a script in the /R/ folder.
   mutate(
     pict_priority = indicator_code_a %in%
       pict_sdg_priorities |
@@ -57,23 +61,36 @@ series_lookup <- lapply(this_codelist@Code, function(this_item) {
       indicator_code_c %in% pict_sdg_priorities
   )
 
+# a many-to-many lookup table, use with caution:
+series_lookup_l <- series_lookup |>
+  select(series_id, label, indicator_code_a:indicator_code_c) |>
+  gather(sequence, indicator_code, -series_id, -label) |>
+  select(-sequence) |>
+  mutate(sdg = str_extract(indicator_code, "^[0-9]*")) |>
+  mutate(pict_priority = indicator_code %in% pict_sdg_priorities) |>
+  mutate(
+    pacstat_priority = pict_priority &
+      (sdg %in% c(1:10, 16) | indicator_code == "17.19.2")
+  )
+
+# there will be lots of interest in this so save it as an output in its own
+# right
+write_csv(series_lookup_l, "output/sdg_series_pacstat_lookup.csv")
+
+
 # Which ones in our list of PICT priorities are missing from this codelist?
 # number rows below should be zero
 stopifnot(
   pict_sdg_priorities[
     !pict_sdg_priorities %in%
-      unique(c(
-        filter(series_lookup, pict_priority)$indicator_code_a,
-        filter(series_lookup, pict_priority)$indicator_code_b,
-        filter(series_lookup, pict_priority)$indicator_code_c
-      ))
+      unique(series_lookup_l$indicator_code)
   ] |>
     nrow() ==
     0
 )
 
+#---------------Define PICTs of interest-----------
 
-View(series_lookup)
 # 10 PICTs that are members of IDA
 ida_picts <- c(
   "FM", # Federated States of Micronesia
@@ -89,40 +106,30 @@ ida_picts <- c(
 )
 stopifnot(length(ida_picts) == 10)
 
-download_sdg <- function(url) {
-  this_sdg <- readSDMX(url) |>
+#---------------------------Download data--------
+df_of_interest <- paste0("DF_SDG_", sprintf("%02d", c(1:10, 16, 17)))
+
+# Vector of the SERIES codes of just those of interest to PacStat
+# because they are in SDGs 1-10, 16 or a particular indicator in 17.19.2
+series_of_interest <- series_lookup_l |>
+  filter(pacstat_priority) |>
+  pull(series_id) |>
+  unique()
+
+sdgs_list <- list()
+
+for (i in 1:length(df_of_interest)) {
+  sdgs_list[[i]] <- readSDMX(
+    providerId = "PDH",
+    resource = "data",
+    flowRef = df_of_interest[i]
+  ) |>
     as_tibble() |>
     clean_names() |>
-    filter(ref_area %in% ida_picts)
-
-  missing_picts <- ida_picts[!ida_picts %in% unique(this_sdg$ref_area)]
-  if (length(missing_picts) > 0) {
-    warning(glue("{paste(missing_picts, collapse = ' ')} missing from data"))
-  }
-
-  # there aren't meant to be any NAs in the observations
-  stopifnot(sum(is.na(this_sdg$obs_value)) == 0)
-  return(this_sdg)
+    # only our series of interest and countries of interest:
+    filter(series %in% series_of_interest, ref_area %in% ida_picts)
 }
 
+sdgs <- bind_rows(sdgs_list)
 
-# note - this downloads some unnecessary countries and then kicks them out straight away
-sdg1 <- download_sdg(
-  "https://stats-sdmx-disseminate.pacificdata.org/rest/data/SPC,DF_SDG_01,4.4/A.G+N.SI_POV_EMP1+SI_COV_SOCAST+SI_COV_SOCINS+SI_POV_DAY1+SI_POV_NAHC+SD_MDP_ANDI+SD_MDP_MUHC+SI_COV_BENFTS+SI_COV_CHLD+SI_COV_DISAB+SI_COV_PENSN+SI_COV_POOR+SI_COV_UEMP+SI_COV_VULN+SI_COV_WKINJRY+SP_ACS_BSRVSAN+SP_ACS_BSRVH2O.MEL+MIC+POL+AS+CK+FJ+PF+GU+KI+MH+FM+NR+NC+NU+MP+PW+PG+WS+SB+TK+TO+TV+VU+WF._T+M+F._T+Y0T14+Y_GE15+Y_GE65._T+U+R._T.......?startPeriod=1993&dimensionAtObservation=AllDimensions"
-)
-
-sdg2 <- download_sdg(
-  "https://stats-sdmx-disseminate.pacificdata.org/rest/data/SPC,DF_SDG_02,4.4/A.G+N.SN_ITK_DEFCN+SH_STA_STNTN+SH_STA_WASTN+SN_ITK_DEFC+SH_STA_STNT+SH_STA_WAST+SN_STA_OVWGT+SI_AGR_SSFP+SI_AGR_LSFP+AG_LND_SUST+AG_LND_FOVH+AG_LND_NFI+AG_LND_RMM+AG_LND_SDGRD+AG_LND_H2OAVAIL+AG_LND_FERTMG+AG_LND_AGRBIO+AG_LND_AGRWAG+AG_LND_FIES+AG_LND_LNDSTR+AG_LND_SUST_PRXTS+AG_LND_SUST_PRXCSS+ER_GRF_ANIMKPT+ER_GRF_ANIMRCNTN+ER_GRF_PLNTSTOR+ER_GRF_ANIMRCNTN_TRB+ER_GRF_ANIMKPT_TRB+AG_PRD_ORTIND+AG_XPD_AGSGB+AG_PRD_AGVAS.CK+FJ+PF+GU+KI+MH+MEL+MIC+FM+NR+NC+NU+MP+PW+PG+POL+WS+SB+TO+TV+VU._T+M+F._T+Y0T4._T._T......._T?startPeriod=1990&dimensionAtObservation=AllDimensions"
-)
-
-nrow(sdg2)
-
-readSDMX()
-
-sdg2a <- readSDMX(
-  providerId = "PDH",
-  resource = "data",
-  flowRef = "DF_SDG_02"
-) |>
-  as_tibble() |>
-  clean_names()
+#================Analysis and presentation==============
