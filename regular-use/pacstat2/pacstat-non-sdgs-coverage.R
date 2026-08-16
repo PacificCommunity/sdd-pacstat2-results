@@ -64,7 +64,7 @@ labour_stats <- readSDMX(
   as_tibble() |>
   clean_names() |>
   filter(geo_pict %in% ida_picts) |>
-  distinct(freq, geo_pict, indicator, sex, age, urbanization)
+  distinct(freq, geo_pict, indicator, sex, age, urbanization, obs_time)
 
 #-----------5. births and deaths----------------- We have a couple of sources of
 # these
