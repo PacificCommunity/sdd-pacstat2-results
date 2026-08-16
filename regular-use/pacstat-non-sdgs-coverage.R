@@ -41,3 +41,16 @@
 #------------------9.employment by industry-------------
 
 #-------------------10. CPI by division-------------
+cpi <- readSDMX(
+  providerId = "PDH",
+  resource = "data",
+  flowRef = "DF_CPI"
+) |>
+  as_tibble() |>
+  clean_names() |>
+  filter(geo_pict %in% ida_picts) |>
+  # excluding PERCENT because it is not really an additional observation
+  filter(unit_measure == "INDEX")
+
+# 3566 observations
+nrow(cpi)
