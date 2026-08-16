@@ -130,6 +130,140 @@ for (i in 1:length(df_of_interest)) {
     filter(series %in% series_of_interest, ref_area %in% ida_picts)
 }
 
-sdgs <- bind_rows(sdgs_list)
+sdgs <- bind_rows(sdgs_list) |>
+  mutate(
+    country = countrycode(
+      ref_area,
+      origin = "iso2c",
+      destination = "country.name.en"
+    )
+  )
 
+# we expect no NAs
+stopifnot(
+  nrow(filter(sdgs, is.na(obs_value))) == 0
+)
 #================Analysis and presentation==============
+
+# Key number - how many observations?
+nrow(sdgs)
+
+p1 <- sdgs |>
+  group_by(obs_time) |>
+  summarise(obs = n()) |>
+  ggplot(aes(x = obs_time, y = obs)) +
+  geom_col(fill = spc_cols(2)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(
+    x = "Reference period",
+    y = "Number of observations",
+    title = "PacStat2-relevant SDG observations for IDA countries in PDH.Stat",
+    subtitle = "SDGs 1-10, 16 and 17.19.2, where country-values are possible"
+  )
+
+p2 <- sdgs |>
+  filter(obs_time >= 2000) |>
+  group_by(obs_time, country) |>
+  summarise(obs = n()) |>
+  ggplot(aes(x = obs_time, y = obs)) +
+  facet_wrap(~country, ncol = 5) +
+  geom_col(fill = spc_cols(2)) +
+  scale_x_discrete(breaks = c(2002, 2014, 2026)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(
+    x = "Reference period",
+    y = "Number of observations",
+    title = "PacStat2-relevant SDG observations for IDA countries in PDH.Stat",
+    subtitle = "SDGs 1-10, 16 and 17.19.2, where country-values are possible"
+  )
+
+sdgs_cumul <- sdgs |>
+  mutate(obs_time = as.numeric(obs_time)) |>
+  group_by(obs_time) |>
+  summarise(obs = n()) |>
+  arrange(obs_time) |>
+  mutate(cumul_obs = cumsum(obs)) |>
+  mutate(
+    increase = cumul_obs - lag(cumul_obs),
+    growth = increase / lag(cumul_obs)
+  )
+
+tail(sdgs_cumul, 10)
+
+p3 <- sdgs_cumul |>
+  ggplot(aes(x = obs_time, y = cumul_obs)) +
+  geom_line(colour = spc_cols(2)) +
+  scale_y_continuous(label = comma) +
+  labs(
+    x = "Reference period",
+    y = "Cumulative number of observations",
+    title = "PacStat2-relevant SDG observations for IDA countries in PDH.Stat",
+    subtitle = "SDGs 1-10, 16 and 17.19.2, where country-values are possible"
+  )
+
+p4 <- sdgs_cumul |>
+  # massive growth in 2000 so only show after that point
+  filter(obs_time > 2000) |>
+  ggplot(aes(x = obs_time, y = growth)) +
+  geom_line(colour = spc_cols(2)) +
+  scale_y_continuous(label = percent) +
+  labs(
+    x = "Reference period",
+    y = "Growth in cumulative number of observations",
+    title = "PacStat2-relevant SDG observations for IDA countries in PDH.Stat",
+    subtitle = "SDGs 1-10, 16 and 17.19.2, where country-values are possible"
+  )
+
+
+svglite("output/sdg-count-total.svg", width = 10, height = 5)
+print(p1)
+dev.off()
+
+svglite("output/sdg-count-by-country.svg", width = 10, height = 5)
+print(p2)
+dev.off()
+
+svglite("output/sdg-count-total-cumulative.svg", width = 10, height = 5)
+print(p3)
+dev.off()
+
+svglite("output/sdg-count-cumulative-growth.svg", width = 10, height = 5)
+print(p4)
+dev.off()
+
+#----------------choosing a target for 2032-----------
+tail(sdgs_cumul, 10)
+# 2026 value of cumul_obs is 31904
+
+# but what is the baseline? Obviously 2024, 2025 and 2026 are incomplete and
+# still increasing Say they increase to mean(c(1651, 2058, 1732, 1960)) = 1850,
+# the average for 2020-2023
+sdgs_cumul |>
+  select(obs_time, obs, current_cumul_obs = cumul_obs) |>
+  filter(obs_time <= 2023) |>
+  bind_rows(tibble(
+    obs_time = 2024:2032,
+    obs = c(rep(1850, 6), 1000, 500, 100)
+  )) |>
+  mutate(
+    new_cumul_obs = cumsum(obs),
+    growth_since_2026 = new_cumul_obs / nrow(sdgs) - 1
+  ) |>
+  tail(10)
+
+# this suggests that the way we are currently going, if we can get the average
+# number of observations that was achieved for 2020:2023 for 2024 to 2029 then
+# 1000, 500, 100 for 2030, 2031 and 2032 we get a total of 33% increase from the
+# current number.
+
+# This suggests a 40% increase rather than 33% would be pretty ambitious. That
+# would mean an average increase of about 2250 per year rather than 1850 per
+# year. In the past, only 2019 has this many observations
+
+# My gut feel is 35% would be pretty good as there's absolutely no guarantee we
+# will keep up with the 2020:2023 average.
+
+# maximum obs is 2507 in 2019 - seven year lag for today. Say by 2032 we wanted
+# that many observations for everything up to 2029 (three year lag) and 1000 for
+# 2030, 500 for 2031. this seems to ambitious but gives a good maximum am bition
