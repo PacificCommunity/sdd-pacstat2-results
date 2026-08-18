@@ -139,6 +139,7 @@ sdgs <- bind_rows(sdgs_list) |>
   distinct(
     series,
     ref_area,
+    country,
     sex,
     age,
     urbanisation,
@@ -148,7 +149,7 @@ sdgs <- bind_rows(sdgs_list) |>
 
 # we expect no NAs, so let's just check:
 stopifnot(
-  nrow(filter(sdgs, is.na(obs_value))) == 0
+  nrow(filter(bind_rows(sdgs_list), is.na(obs_value))) == 0
 )
 #================Analysis and presentation==============
 # Various ways we might use this; for now these are more illustrative.
