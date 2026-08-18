@@ -1,6 +1,6 @@
 pict_sdg_priorities <- c(
   "
-  
+   
   1.1.1 
   1.2.1 
   1.2.2 
@@ -133,5 +133,5 @@ pict_sdg_priorities <- c(
   stringr::str_squish() |>
   stringr::str_split(pattern = " ") |>
   unlist()
-#The list of priority indicators also includes SDG 12.b.1, which concerns SEEA tables and those of the Tourism Satellite Account
-#The priority indicator is 17.6.2 (not 17.6.1)
+# The list of priority indicators also includes SDG 12.b.1, which concerns SEEA
+# tables and those of the Tourism Satellite Account
