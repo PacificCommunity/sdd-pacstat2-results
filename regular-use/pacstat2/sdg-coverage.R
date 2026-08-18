@@ -243,17 +243,17 @@ dev.off()
 
 #----------------choosing a target for 2032-----------
 tail(sdgs_cumul, 10)
-# 2026 value of cumul_obs is 31904
+# 2026 value of cumul_obs is 22038
 
 # but what is the baseline? Obviously 2024, 2025 and 2026 are incomplete and
-# still increasing Say they increase to mean(c(1651, 2058, 1732, 1960)) = 1850,
+# still increasing Say they increase to mean(c(1106, 1244, 1114, 1176)) = 1160,
 # the average for 2020-2023
 sdgs_cumul |>
   select(obs_time, obs, current_cumul_obs = cumul_obs) |>
   filter(obs_time <= 2023) |>
   bind_rows(tibble(
     obs_time = 2024:2032,
-    obs = c(rep(1850, 6), 1000, 500, 100)
+    obs = c(rep(1160, 6), 600, 300, 50)
   )) |>
   mutate(
     new_cumul_obs = cumsum(obs),
@@ -263,25 +263,10 @@ sdgs_cumul |>
 
 # this suggests that the way we are currently going, if we can get the average
 # number of observations that was achieved for 2020:2023 for 2024 to 2029 then
-# 1000, 500, 100 for 2030, 2031 and 2032 we get a total of 33% increase from the
+# tapering down for 2030, 2031 and 2032 we get a total of 30% increase from the
 # current number.
 
-# This suggests a 40% increase rather than 33% would be pretty ambitious. That
-# would mean an average increase of about 2250 per year rather than 1850 per
-# year. In the past, only 2019 has this many observations
+# This suggests a 40% increase rather than 30% would be pretty ambitious.
 
-# My gut feel is 35% would be pretty good as there's absolutely no guarantee we
+# My gut feel is 35% or even 30% would be pretty good as there's absolutely no guarantee we
 # will keep up with the 2020:2023 average.
-
-# maximum obs is 2507 in 2019 - seven year lag for today. Say by 2032 we wanted
-# that many observations for everything up to 2029 (three year lag) and 1000 for
-# 2030, 500 for 2031. this seems to ambitious but gives a good maximum ambition
-
-# ******
-#Comment AS: the peak in 2019 is related to the SDG Refactoring project - it
-# reflects the upload of national data points from Batch 1 (goal 7,8,12,13) +
-# goal 5 if we exclude national data points, the total is 2,063. A large portion
-# of the national data points is disaggregated in the goal 8 (unemployment rate
-# ou neet based on HIES) In the non-sdgs-coverage, the calculation is counting
-# only total numbers,  and don't give extra points for extra granularity, which
-# is not the case for the SDGs
