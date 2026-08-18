@@ -126,11 +126,16 @@ sdgs <- bind_rows(sdgs_list) |>
       destination = "country.name.en"
     )
   ) |>
-  # We could filter by the reporting type G ("global" i.e. from the UN
-  # reporting database) as the refactoring to add national indicators is not done
-  # yet (2026) and muddies the water. But the intent is to measure growing numbers of data, so 'national' estimates still count
-  filter(reporting_type %in% c("N", "G")) |>
-  # we only use certain composite breakdowns - so exclude income, education, occupation, custom, activity, product
+  # We could filter by the reporting type G ("global" i.e. from the UN reporting
+  # database) as the refactoring to add national indicators is not done yet
+  # (2026) and muddies the water. But the intent is to measure growing numbers
+  # of data, so 'national' estimates still count, if there isn't a global
+  # estimate available. So there's no need to filter at all here.
+  #
+  # we only use certain composite breakdowns - so exclude income, education,
+  # occupation, custom, activity, product. Note that reporting_type is
+  # deliberately excluded in this next statement - so if there is both an N and
+  # a G observation for a series in one year, only one counts.
   distinct(
     series,
     ref_area,
