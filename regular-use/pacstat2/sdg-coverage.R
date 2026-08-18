@@ -13,39 +13,38 @@ options(timeout = 300) # 5 minutes
 #------------Get the SDG series metadata---------------
 # This seems really clunky but was the best way I could come up with
 
-# Get all the metadata from one of hte SDGs in PDH, doesn't matter which SDG:
+# Get all the metadata from one of the SDGs in PDH, doesn't matter which SDG:
 metadata <- readSDMX(
   "https://stats-sdmx-disseminate.pacificdata.org/rest/dataflow/SPC/DF_SDG_02/4.4?references=all"
 )
 
-# Get the codelists slot from the codelists slot from this very complex XML object...
-codelists <- metadata@codelists@codelists
+# # Get the codelists slot from the codelists slot from this very complex XML object...
+# codelists <- metadata@codelists@codelists
+# 
+# # find the codelist for CL_SERIES in particular (turns out to be '10'):
+# this_codelist <- codelists[[match(
+#   "CL_SERIES",
+#   sapply(codelists, function(x) {
+#     x@id
+#   })
+# )]]
 
-# find the codelist for CL_SERIES in particular (turns out to be '10'):
-this_codelist <- codelists[[match(
-  "CL_SERIES",
-  sapply(codelists, function(x) {
-    x@id
-  })
-)]]
+#proposition to simplify the code above
+cl_series <- as.data.frame(slot(metadata, "codelists"), codelistId = "CL_SERIES") |> 
+  rename(label=label.en.label, series_id=id) |> 
+  select(series_id,label)
 
-# The @Code slot in this_codelist is a list with 800+ elements, one for each
-# SERIES code, we can extract the name and label from these that we need:
-# the @Code slot in each
-series_lookup <- lapply(this_codelist@Code, function(this_item) {
-  tibble(series_id = this_item@id, label = this_item@label$en)
-}) |>
-  # collapse all of these into a single tibble with 850 or so rows:
-  bind_rows() |>
-  # get the SDG indicator number eg 1.2.1 from out of the square brackets into its own
+series_lookup <- cl_series |>
+    # get the SDG indicator number eg 1.2.1 from out of the square brackets into its own column
   mutate(
     indicator_codes = stringr::str_remove_all(
-      stringr::str_extract(label, "\\[[^]]+\\]"),
+      # Since some [] contain information other than the SDG indicator code - I have added the goal number in the code
+      stringr::str_extract(label, "\\[(1[0-7]|[1-9])[^]]*\\]"),
       "\\[|\\]"
     )
   ) |>
   # some SERIES have multiple indicators e.g. 4.7.1, 12.8.1, 13.3.1
-  mutate(indicator_codes = str_remove_all(indicator_codes, " ")) |>
+  mutate(indicator_codes = stringr::str_remove_all(indicator_codes, " ")) |>
   separate(
     indicator_codes,
     sep = ",",
@@ -53,14 +52,48 @@ series_lookup <- lapply(this_codelist@Code, function(this_item) {
     fill = "right",
     remove = FALSE
   ) |>
-  #indicate whether or not this is one of the PICT priority indicators. Note the
-  #vector pict_sdg_priorities is defined in a script in the /R/ folder.
+  # indicate whether or not this is one of the PICT priority indicators. Note the
+  # vector pict_sdg_priorities is defined in a script in the /R/ folder.
   mutate(
-    pict_priority = indicator_code_a %in%
-      pict_sdg_priorities |
+    pict_priority = indicator_code_a %in% pict_sdg_priorities |
       indicator_code_b %in% pict_sdg_priorities |
       indicator_code_c %in% pict_sdg_priorities
   )
+
+
+# # The @Code slot in this_codelist is a list with 800+ elements, one for each
+# # SERIES code, we can extract the name and label from these that we need:
+# # the @Code slot in each
+# series_lookup <- lapply(this_codelist@Code, function(this_item) {
+#   tibble(series_id = this_item@id, label = this_item@label$en)
+# }) |>
+#   # collapse all of these into a single tibble with 850 or so rows:
+#   bind_rows() |>
+#   # get the SDG indicator number eg 1.2.1 from out of the square brackets into its own
+#   mutate(
+#     indicator_codes = stringr::str_remove_all(
+#       #Since some [] contain information other than the SDG indicator code - I have added the goal number in the code
+#       stringr::str_extract(label, "\\[(1[0-7]|[1-9])[^]]*\\]"),
+#       "\\[|\\]"
+#     )
+#   ) |>
+#   # some SERIES have multiple indicators e.g. 4.7.1, 12.8.1, 13.3.1
+#   mutate(indicator_codes = str_remove_all(indicator_codes, " ")) |>
+#   separate(
+#     indicator_codes,
+#     sep = ",",
+#     into = c("indicator_code_a", "indicator_code_b", "indicator_code_c"),
+#     fill = "right",
+#     remove = FALSE
+#   ) |>
+#   #indicate whether or not this is one of the PICT priority indicators. Note the
+#   #vector pict_sdg_priorities is defined in a script in the /R/ folder.
+#   mutate(
+#     pict_priority = indicator_code_a %in%
+#       pict_sdg_priorities |
+#       indicator_code_b %in% pict_sdg_priorities |
+#       indicator_code_c %in% pict_sdg_priorities
+#   )
 
 # a many-to-many lookup table, use with caution:
 series_lookup_l <- series_lookup |>
@@ -133,7 +166,11 @@ sdgs <- bind_rows(sdgs_list) |>
       origin = "iso2c",
       destination = "country.name.en"
     )
-  )
+  ) #|>
+# I suggest to filter by the reporting type as the refactoring is not done yet - but it depends if it will be used regularly or not
+#for example 2019 is over-represented as we have recently added national datapoints on goal 8 
+      
+   #filter(reporting_type=="G")
 
 # we expect no NAs, so let's just check"
 stopifnot(
@@ -263,4 +300,9 @@ sdgs_cumul |>
 
 # maximum obs is 2507 in 2019 - seven year lag for today. Say by 2032 we wanted
 # that many observations for everything up to 2029 (three year lag) and 1000 for
-# 2030, 500 for 2031. this seems to ambitious but gives a good maximum am bition
+# 2030, 500 for 2031. this seems to ambitious but gives a good maximum ambition
+
+# ******
+#Comment AS: the peak in 2019 is related to the SDG Refactoring project - it reflects the upload of national data points from Batch 1 (goal 7,8,12,13) + goal 5
+# if we exclude national data points, the total is 2,063. A large portion of the national data points is disaggregated in the goal 8 (unemployment rate ou neet based on HIES)
+# In the non-sdgs-coverage, the calculation is counting only total numbers,  and don't give extra points for extra granularity, which is not the case for the SDGs

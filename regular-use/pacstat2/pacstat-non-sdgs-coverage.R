@@ -24,6 +24,9 @@
 
 # counting starts at #2 so #1 can be the SDGs (separate script)
 
+#adding source just in case anyone wants to start with this script
+source("setup.R")
+
 #------------2. Number people resident------------
 #
 # We have a number for this of course in the poulation projections, but the
@@ -42,10 +45,10 @@ disability_pdh <- readSDMX(
 ) |>
   as_tibble() |>
   clean_names() |>
-  filter(geo_pict %in% ida_picts)
+  filter(geo_pict %in% ida_picts) 
 
 # the data from PDH is large (90,000 observations) because so many different
-# cut-offs, etc. we only care about the numer of combinations of country, time,
+# cut-offs, etc. we only care about the number of combinations of country, time,
 # sex, age and urbanisation; not that there is a vector of values for each some
 # combination
 disability <- disability_pdh |>
