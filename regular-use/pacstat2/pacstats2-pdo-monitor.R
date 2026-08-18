@@ -45,6 +45,7 @@ latest_update <- tribble(
 
 # Append this to the end of our data file:
 datafile <- "data/pacstat2-pdo.csv"
+
 if (file.exists(datafile)) {
   append <- TRUE
 } else {

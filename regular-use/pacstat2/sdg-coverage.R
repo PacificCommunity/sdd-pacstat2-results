@@ -125,13 +125,23 @@ sdgs <- bind_rows(sdgs_list) |>
       origin = "iso2c",
       destination = "country.name.en"
     )
-  ) #|>
-# I suggest to filter by the reporting type as the refactoring is not done yet - but it depends if it will be used regularly or not
-#for example 2019 is over-represented as we have recently added national datapoints on goal 8
+  ) |>
+  # We could filter by the reporting type G ("global" i.e. from the UN
+  # reporting database) as the refactoring to add national indicators is not done
+  # yet (2026) and muddies the water. But the intent is to measure growing numbers of data, so 'national' estimates still count
+  filter(reporting_type %in% c("N", "G")) |>
+  # we only use certain composite breakdowns - so exclude income, education, occupation, custom, activity, product
+  distinct(
+    series,
+    ref_area,
+    sex,
+    age,
+    urbanisation,
+    disability_status,
+    obs_time
+  )
 
-#filter(reporting_type=="G")
-
-# we expect no NAs, so let's just check"
+# we expect no NAs, so let's just check:
 stopifnot(
   nrow(filter(sdgs, is.na(obs_value))) == 0
 )
