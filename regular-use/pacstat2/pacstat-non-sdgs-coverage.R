@@ -38,20 +38,18 @@ source("setup.R")
 census_pop <- tibble()
 
 #------------3. People with disabilities------------
-disability_pdh <- readSDMX(
+disability <- readSDMX(
   providerId = "PDH",
   resource = "data",
   flowRef = "DF_DISABILITY"
 ) |>
   as_tibble() |>
   clean_names() |>
-  filter(geo_pict %in% ida_picts) 
-
-# the data from PDH is large (90,000 observations) because so many different
-# cut-offs, etc. we only care about the number of combinations of country, time,
-# sex, age and urbanisation; not that there is a vector of values for each some
-# combination
-disability <- disability_pdh |>
+  filter(geo_pict %in% ida_picts) |>
+  # the data from PDH is large (90,000 observations) because so many different
+  # cut-offs, etc. we only care about the number of combinations of country, time,
+  # sex, age and urbanisation; not that there is a vector of values for each some
+  # combination
   distinct(geo_pict, freq, sex, age, urbanization, obs_time)
 
 #-----------4. participating labour force, employed, etc------
@@ -141,18 +139,16 @@ remittances <- readSDMX(
 
 #------------------9.employment by industry-------------
 
-employment_pdh <- readSDMX(
+employment <- readSDMX(
   providerId = "PDH",
   resource = "data",
   flowRef = "DF_EMPLOYED"
 ) |>
   as_tibble() |>
   clean_names() |>
-  filter(geo_pict %in% ida_picts)
-
-# there are lots of extra breakdowns we don't want to count eg disability,
-# education, occupation, so we just want the following unique combos:
-employment <- employment_pdh |>
+  filter(geo_pict %in% ida_picts) |>
+  # there are lots of extra breakdowns we don't want to count eg disability,
+  # education, occupation, so we just want the following unique combos:
   distinct(geo_pict, freq, economic_sector, obs_time)
 
 #-------------------10. CPI by division-------------
