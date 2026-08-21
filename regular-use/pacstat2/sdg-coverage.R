@@ -15,7 +15,7 @@ options(timeout = 300) # 5 minutes
 
 # Get all the metadata from one of the SDGs in PDH, doesn't matter which SDG:
 metadata <- readSDMX(
-  "https://stats-sdmx-disseminate.pacificdata.org/rest/dataflow/SPC/DF_SDG_02/4.4?references=all"
+  "https://stats-sdmx-disseminate.pacificdata.org/rest/dataflow/SPC/DF_SDG_02/latest?references=all"
 )
 
 # Get the codelists slot from the codelists slot from this very complex XML object...
@@ -43,14 +43,6 @@ series_lookup <- cl_series |>
     into = c("indicator_code_a", "indicator_code_b", "indicator_code_c"),
     fill = "right",
     remove = FALSE
-  ) |>
-  # indicate whether or not this is one of the PICT priority indicators. Note the
-  # vector pict_sdg_priorities is defined in a script in the /R/ folder.
-  mutate(
-    pict_priority = indicator_code_a %in%
-      pict_sdg_priorities |
-      indicator_code_b %in% pict_sdg_priorities |
-      indicator_code_c %in% pict_sdg_priorities
   )
 
 
@@ -61,6 +53,8 @@ series_lookup_l <- series_lookup |>
   select(-sequence) |>
   mutate(sdg = str_extract(indicator_code, "^[0-9]*")) |>
   mutate(pict_priority = indicator_code %in% pict_sdg_priorities) |>
+  # indicate whether or not this is one of the PICT priority indicators. Note the
+  # vector pict_sdg_priorities is defined in a script in the /R/ folder.
   mutate(
     pacstat_priority = pict_priority &
       (sdg %in% c(1:10, 16) | indicator_code == "17.19.2")
