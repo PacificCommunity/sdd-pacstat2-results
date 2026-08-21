@@ -54,7 +54,7 @@ disability <- readSDMX(
 
 #-----------4. participating labour force, employed, etc------
 #
-# this is very week at the moment. dataflow below has unemployment and
+# this is very weak at the moment. dataflow below has unemployment and
 # participation rate and seems to be the only one in PDH (even though could get
 # these from HIES too). Latest observation is 2021.
 labour_stats <- readSDMX(
@@ -95,7 +95,10 @@ vital_stats <- readSDMX(
 dhs_cbr <- readSDMX(
   "https://stats-sdmx-disseminate.pacificdata.org/rest/data/SPC,DF_HEALTH,1.0/A...FER_05..?dimensionAtObservation=AllDimensions"
 ) |>
-  as_tibble()
+  as_tibble() |>
+  clean_names() |>
+  filter(geo_pict %in% ida_picts) |>
+  distinct(geo_pict, indicator, sex, age, time_period)
 
 #--------------6. migrant arrivals and departures-----------
 # No data available on this in PDH.Stat
