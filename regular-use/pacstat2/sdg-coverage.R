@@ -136,6 +136,13 @@ sdgs <- bind_rows(sdgs_list) |>
   # occupation, custom, activity, product. Note that reporting_type is
   # deliberately excluded in this next statement - so if there is both an N and
   # a G observation for a series in one year, only one counts.
+  #
+  # The following 'distinct' operation reduces the number of SDGs substantially,
+  # about 30% as at August 2026. We think this is justified to reduce counting
+  # just extra granularity of additional composite breakdowns that are not core
+  # to what we are measuring, and in some cases to remove when we have two
+  # observations of a value from two methods (global and national)
+  #
   distinct(
     series,
     ref_area,
