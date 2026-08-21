@@ -41,7 +41,7 @@ latest_update <- tribble(
   "Employment by industry" , nrow(employment)                  ,
   "CPI"                    , nrow(cpi)
 ) |>
-  mutate(monitoring_date = Sys.Date())
+  mutate(monitoring_date = format(Sys.Date(), "%Y-%m-%d"))
 
 # Append this to the end of our data file:
 datafile <- "data/pacstat2-pdo.csv"
