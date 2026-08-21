@@ -5,7 +5,7 @@
 #
 # Most of the in-scope statistics are the SDGs and their composite breakdowns,
 # but there are a bunch of more upstream statistics that we also want to count
-# (e.g. number of people, number of peole with staitsitcs, number of births,
+# (e.g. number of people, number of people with disabilities, number of births,
 # etc)
 #
 # This script adds extra rows to the file:
