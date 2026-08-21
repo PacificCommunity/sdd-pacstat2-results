@@ -155,6 +155,13 @@ employment <- readSDMX(
   distinct(geo_pict, freq, economic_sector, obs_time)
 
 #-------------------10. CPI by division-------------
+#
+# Note that the CPI includes both monthly and quarterly data, and including
+# monthly in the count increases it substantially. So if future countries move
+# to country this indicator will go up, and CPI is a substantial proportion of
+# the total indicator count. This is intended behaviour as a stated aim of the
+# project is to include frequency and timeliness of statistics
+
 cpi <- readSDMX(
   providerId = "PDH",
   resource = "data",
