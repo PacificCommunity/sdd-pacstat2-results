@@ -47,7 +47,22 @@ latest_update <- tribble(
 datafile <- "data/pacstat2-pdo.csv"
 
 if (file.exists(datafile)) {
+  # if data exists, in the usual state will just want to append our new rows:
   append <- TRUE
+
+  # But we have to check. What if we've already run this today - we don't want
+  # to keep adding multiple observations for today:
+  current_data <- read_csv(datafile)
+  if (Sys.Date() %in% current_data$monitoring_date) {
+    warning("There is already an observation for today and it will be removed")
+
+    latest_update <- current_data |>
+      filter(monitoring_date != Sys.Date()) |>
+      rbind(latest_update)
+
+    # set append to FALSE as now we are over-writing the whole file with our corrected version
+    append <- FALSE
+  }
 } else {
   append <- FALSE
 }
