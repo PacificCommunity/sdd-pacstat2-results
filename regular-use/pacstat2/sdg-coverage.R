@@ -58,7 +58,8 @@ series_lookup_l <- series_lookup |>
   mutate(
     pacstat_priority = pict_priority &
       (sdg %in% c(1:10, 16) | indicator_code == "17.19.2")
-  )
+  ) |>
+  filter(!is.na(indicator_code))
 
 # there will be lots of interest in this so save it as an output in its own
 # right
