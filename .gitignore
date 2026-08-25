@@ -47,3 +47,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# objects in output (other than the README which is already committed)
+output/
+data/*
+!data/pacstat2-pdo.csv

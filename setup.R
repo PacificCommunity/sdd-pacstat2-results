@@ -5,6 +5,7 @@ library(ggrepel)
 library(rsdmx)
 library(glue)
 library(countrycode)
+library(svglite)
+library(spcstyle)
 
 lapply(list.files("R", pattern = ".[Rr]$", full.names = TRUE), source)
-
