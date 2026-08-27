@@ -98,7 +98,9 @@ dhs_cbr <- readSDMX(
   as_tibble() |>
   clean_names() |>
   filter(geo_pict %in% ida_picts) |>
-  distinct(geo_pict, indicator, sex, age, time_period)
+  # rename one variable to be the same name as all its equivalents
+  rename(obs_time = time_period) |>
+  distinct(geo_pict, indicator, sex, age, obs_time)
 
 #--------------6. migrant arrivals and departures-----------
 # No data available on this in PDH.Stat

@@ -26,6 +26,10 @@ cl_series <- as.data.frame(
   rename(label = label.en.label, series_id = id) |>
   select(series_id, label)
 
+# we want this later so are going to save it
+sdg_series_codelist <- cl_series
+save(sdg_series_codelist, file = "data/sdg_series_codelist.rda")
+
 series_lookup <- cl_series |>
   # get the SDG indicator number eg 1.2.1 from out of the square brackets into its own column
   mutate(

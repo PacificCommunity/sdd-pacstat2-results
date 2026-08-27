@@ -67,3 +67,32 @@ if (file.exists(datafile)) {
   append <- FALSE
 }
 write_csv(latest_update, file = datafile, append = append)
+
+#----------------save a snapshot of the actual data for use in exploratory analysis-------------
+
+# This is a snapshot of the dimensions of the data (so not actual observation
+# values, but all the unique)combinations of date, country, sex, age, indicator,
+# etc) which we will want to use for analysis such as what dates are covered,
+# which indicators appear most often, etc.
+pacstat_pdo1_snapshot <- bind_rows(
+  mutate(sdgs, dataset = "sdgs"),
+  mutate(census_pop, dataset = "census_pop"),
+  mutate(disability, dataset = "disability"),
+  mutate(labour_stats, dataset = "labour_stats"),
+  mutate(vital_stats, dataset = "vital_stats"),
+  mutate(dhs_cbr, dataset = "dhs_cbr"),
+  mutate(migrants, dataset = "migrants"),
+  mutate(visitors, dataset = "visitors"),
+  mutate(remittances, dataset = "remittances"),
+  mutate(employment, dataset = "employment"),
+  mutate(cpi, dataset = "cpi")
+) |>
+  # Caution - obs_time is sometimes a four character year, and sometimes a 7
+  # character year-month eg "2026-10" (that is for monthly CPI) and sometimes
+  # "2025-Q4". But the first four characters are always year (so far...)
+  mutate(year = as.numeric(substring(obs_time, 1, 4))) |>
+  glimpse()
+
+# This data is largish and not of enough interest to compare at different points
+# in time so we are going to save it as a binary object and have Git ignore it.
+save(pacstat_pdo1_snapshot, file = "data/pacstat_pdo1_snapshot.rda")
