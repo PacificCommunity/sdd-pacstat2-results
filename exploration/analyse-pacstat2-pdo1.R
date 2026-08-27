@@ -9,7 +9,12 @@ total_by_year <- pacstat_pdo1_snapshot |>
   arrange(year) |>
   mutate(cumulative = cumsum(n))
 
-# what is the current actual number of observations (28201 as at 26 August 2026)
+# Last 10 years. Note 2025, 2026 down to 1000, 500 (from about 1800 average in
+# earlier years - this is obviously because of a lag in data being prepared and
+# published):
+tail(total_by_year, 10)
+
+# what is the current actual number of observations (26730 as at 26 August 2026)
 current_max <- tail(total_by_year, 1)$cumulative
 
 # the four biggest years in terms of adding observations:
@@ -19,7 +24,7 @@ total_by_year |>
 # Note that 2019 was an unusual year with several hundred "national"  SDG
 # estimates for that year added in the "SDGs refactoring" project in 2026.
 # Putting that unusual year aside, the highest year (as at August 2026) for adding
-# observations was 2024 with 1970 then 2023 with 1959. 2025 and 2026 tail off, because
+# observations was 2023 with 1888 then 2024 with 1875. 2025 and 2026 tail off, because
 # there is a lag between data being collected and being published
 
 # So let's use the average of recent years since that exceptional year
@@ -42,17 +47,18 @@ total_by_year |>
   ) |>
   tail(10)
 
-# This would mean a grwoth of 40% over those six years, suggesting 25% is a bit unambitious:
-38244 / current_max
+# This would mean a grwowth of 35% over those six years, which is probably more
+# ambitious than we want to commit to:
+36300 / current_max
 
 
 #--------------------annual targets for the 25% growth-----------
 #
-# one way to do this is to just make them so they are an even growth rate over
+# one way to do a 25% growth is to just make them so they are an even growth rate over
 # 5.5 years (August 2026 to February 2032) ie:
 growth_rate <- 1.25^(1 / 5.5)
 
-tibble(year = 2026:2032, cumulative = current_max * growth_rate^(0:6))
+tibble(year = 2026:2032, cumulative = current_max * growth_rate^c(0, 1:6 - 0.5))
 # note that this is a bit more than 25% in total, but it is very close to 25%
 # growth from Feb 2027 to Feb 2032
 
