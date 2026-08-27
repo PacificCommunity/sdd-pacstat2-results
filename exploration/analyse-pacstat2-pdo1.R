@@ -1,5 +1,8 @@
 source("setup.R")
 
+# These next two files are created when you run the
+# regular-use/pacstat2/pacstats2-pdo-monitor.R script. Git ignores them, so you
+# need to re-run that in order to have them.
 load("data/pacstat_pdo1_snapshot.rda")
 load("data/sdg_series_codelist.rda")
 
@@ -61,6 +64,7 @@ growth_rate <- 1.25^(1 / 5.5)
 tibble(year = 2026:2032, cumulative = current_max * growth_rate^c(0, 1:6 - 0.5))
 # note that this is a bit more than 25% in total, but it is very close to 25%
 # growth from Feb 2027 to Feb 2032
+# This is the method we have proposed the World Bank actually use.
 
 # note that this growth as a percentage doesn't really make sense normally -
 # it's not like the existing observations generate more, in fact we'd expect to
