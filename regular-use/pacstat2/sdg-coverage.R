@@ -10,6 +10,23 @@ source("setup.R")
 
 options(timeout = 300) # 5 minutes
 
+#-------------Out of scope SDG indicators-----------
+#
+# Some of the SDGs captured are not really statistics, e.g. they are whether or
+# not a country has a legal framework for X; or they are not really the
+# country's responsibility e.g. aid flows
+
+out_of_scope <- read_csv(
+  "raw-data/out-of-scope-sdg-series.csv",
+  col_types = "clc"
+) |>
+  filter(not_national_statistic) |>
+  pull(series)
+
+# Should be about 13 of these, but we may add or subtract some over time so we
+# have a slightly vague test
+stopifnot(length(out_of_scope) > 0 & length(out_of_scope) < 30)
+
 #------------Get the SDG series metadata---------------
 # This seems really clunky but was the best way I could come up with
 
@@ -155,7 +172,9 @@ sdgs <- bind_rows(sdgs_list) |>
     urbanisation,
     disability_status,
     obs_time
-  )
+  ) |>
+  # filter out the out of scope SDGs
+  filter(!series %in% out_of_scope)
 
 # we expect no NAs, so let's just check:
 stopifnot(
