@@ -1,3 +1,6 @@
+# This was a one-off just to identify what dataflows have z or s in the column
+# for urban / rural split
+
 source("setup.R")
 
 load("data/pacstat_pdo1_snapshot.rda")

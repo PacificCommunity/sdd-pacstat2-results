@@ -7,6 +7,14 @@ source("setup.R")
 # These next two files are created when you run the
 # regular-use/pacstat2/pacstats2-pdo-monitor.R script. Git ignores them, so you
 # need to re-run that in order to have them.
+
+# TODO - the intent is to count CPI as not current if it is 3 months out of
+# date. But the approach below is much cruder, it does this if the most recent
+# observation is not in the current year. If it's March, this works, but
+# otherwise it will get a different result. So the TODO is to fix this, which
+# will involve mucking around with the horrible types of dates in the original
+# CPI data (eg 2025Q4 and similar)
+
 load("data/pacstat_pdo1_snapshot.rda")
 load("data/sdg_series_codelist.rda")
 
