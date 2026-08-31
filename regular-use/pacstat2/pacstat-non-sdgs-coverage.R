@@ -6,17 +6,18 @@
 #
 # 3. number of people with disabilities (by sex and by rural/urban);
 #
-# 4. size of participating labour force, formally employed, informally employed and
-# unemployed (by sex, by broad age group);
+# 4. size of participating labour force, formally employed, informally employed
+# and unemployed (by sex, by broad age group);
 #
-#  5. births (by sex and by age group of mother) and deaths (by sex and by age
+# 5. births (by sex and by age group of mother) and deaths (by sex and by age
 #  group);
 #
 # 6. long term migrant arrivals and departures (by sex);
 #
 # 7. tourist or visitor arrivals and departures (by sex);
 #
-# 8. remittances;
+# 8. remittances; (although this may be excluded from the eventual indicator, we
+#    will keep counting it and just remember to knock it out when reporting)
 #
 # 9. employment (by broad industry); and
 #

@@ -16,7 +16,11 @@ latest <- pacstat_pdo1_snapshot |>
   filter(dataset != "remittances") |>
   mutate(
     combined_country = coalesce(geo_pict, ref_area),
-    combined_series = coalesce(series, dataset, indicator)
+    # if series exists, then indicator doesn't and vice versa. series exists for
+    # SDGs. indicator exists when a non-SDG dataset has more than one indicator.
+    # Between them, the next line of code gives us a unique idnetifer of the
+    # series-indicator-dataset combination:
+    combined_series = paste(coalesce(series, indicator), dataset)
   ) |>
   group_by(
     combined_series,
@@ -31,7 +35,8 @@ latest <- pacstat_pdo1_snapshot |>
   ) |>
   summarise(latest_obs = max(year), .groups = "drop")
 
-# we want all the combinations of sex, age, etc and series that actuall exist
+# we want all the combinations of sex, age, other composite breakdowns, and
+# series that actually exist::
 valid_combos <- latest |>
   distinct(
     combined_series,
@@ -42,6 +47,14 @@ valid_combos <- latest |>
     disability_status,
     economic_sector,
     commodity
+  ) |>
+  bind_rows(
+    expand.grid(
+      combined_series = "population from census",
+      sex = c("_T", "M", "F"),
+      age = LETTERS[1:8]
+    ),
+    expand.grid(combined_series = "migration", sex = c("_T", "M", "F"))
   )
 
 # and we want all the countries that exist:
@@ -70,14 +83,19 @@ all_combos <- latest |>
     )
   ) |>
   mutate(
+    # if there's no data, we say the latest observation was in year zero:
     latest_obs = replace_na(latest_obs, 0),
     target_year = ifelse(
-      combined_series == "cpi",
+      combined_series == "IDX cpi",
       year(Sys.Date()),
       year(Sys.Date()) - 5
     )
   )
 
+
+#-------------------------what are the results - how many indicators are current and how many not?------------------
+
+# By country:
 all_combos |>
   group_by(combined_country) |>
   summarise(
@@ -88,7 +106,7 @@ all_combos |>
   ) |>
   arrange(desc(prop_current))
 
-
+# In total:
 all_combos |>
   summarise(
     number_possible = n(),
@@ -96,15 +114,3 @@ all_combos |>
     number_current = sum(latest_obs >= target_year),
     prop_current = mean(latest_obs >= target_year)
   )
-
-
-View(valid_combos)
-
-count(all_combos, target_year)
-
-filter(all_combos, target_year == 2026)
-
-count(pacstat_pdo1_snapshot, indicator, sort = TRUE)
-glimpse(pacstat_pdo1_snapshot)
-
-unique(latest$combined_series)
