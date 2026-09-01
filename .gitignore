@@ -52,3 +52,4 @@ rsconnect/
 output/
 data/*
 !data/pacstat2-pdo.csv
+!data/README.txt

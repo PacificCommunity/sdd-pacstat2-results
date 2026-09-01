@@ -1,0 +1,187 @@
+series,not_national_statistic,label
+DC_TOF_INFRAL,TRUE,"Total official flows for infrastructure, by recipient countries [9.a.1]"
+DC_TOF_TRDCML,TRUE,"Total official flows (commitments) for Aid for Trade, by recipient countries [8.a.1]"
+DC_TOF_TRDDBML,TRUE,"Total official flows (disbursement) for Aid for Trade, by recipient countries [8.a.1]"
+DC_TRF_TOTL,TRUE,"Total assistance for development, by recipient countries [10.b.1]"
+EG_IFF_RANDN,TRUE,"International financial flows to developing countries in support of clean energy research and development and renewable energy production, including in hybrid systems [7.a.1]"
+SG_GEN_EQPWNN,TRUE,Countries with systems to track and make public allocations for gender equality and women's empowerment (0 = does not meet the requirement; 1 = approached the requirement; 2  =  Fully meets requirement) [5.c.1]
+SG_INT_MBRDEV,TRUE,"Proportion of members of developing countries in international organizations, by organization [10.6.1, 16.8.1]"
+SG_INT_VRTDEV,TRUE,"Proportion of voting rights of developing countries in international organizations, by organization [10.6.1, 16.8.1]"
+SG_LGL_GENEQEMP,TRUE,"Legal frameworks that promote, enforce and monitor gender equality (percentage of achievement, 0 - 100) -- Area 3: employment and economic benefits. [5.1.1]"
+SG_LGL_GENEQLFP,TRUE,"Legal frameworks that promote, enforce and monitor gender equality (percentage of achievement, 0 - 100) -- Area 1: overarching legal frameworks and public life. [5.1.1]"
+SG_LGL_GENEQMAR,TRUE,"Legal frameworks that promote, enforce and monitor gender equality (percentage of achievement, 0 - 100) -- Area 4: marriage and family. [5.1.1]"
+SG_LGL_GENEQVAW,TRUE,"Legal frameworks that promote, enforce and monitor gender equality (percentage of achievement, 0 - 100) -- Area 2: violence against women. [5.1.1]"
+SG_REG_CENSUSN,TRUE,Countries that have conducted at least one population and housing census in the last 10 years (1 = YES; 0 = NO) [17.19.2]
+AG_LND_AGRBIO,,Proportion of agricultural land area that has achieved an acceptable or desirable level of use of agro-biodiversity supportive practices [2.4.1]
+AG_LND_AGRWAG,,Proportion of agricultural land area that has achieved an acceptable or desirable level of wage rate in agriculture [2.4.1]
+AG_LND_FERTMG,,Proportion of agricultural land area that has achieved an acceptable or desirable level of management of fertilizers [2.4.1]
+AG_LND_FIES,,Proportion of agricultural land area that has achieved an acceptable or desirable level of food security [2.4.1]
+AG_LND_FOVH,,Proportion of agricultural land area that has achieved an acceptable or desirable level of farm output value per hectare [2.4.1]
+AG_LND_H2OAVAIL,,Proportion of agricultural land area that has achieved an acceptable or desirable level of variation in water availability [2.4.1]
+AG_LND_LNDSTR,,Proportion of agricultural land area that has achieved an acceptable or desirable level of secure tenure rights to agricultural land [2.4.1]
+AG_LND_NFI,,Proportion of agricultural land area that has achieved an acceptable or desirable level of net farm income [2.4.1]
+AG_LND_PSTCDSMG,,Proportion of agricultural land area that has achieved an acceptable or desirable level of management of pesticides [2.4.1]
+AG_LND_RMM,,Proportion of agricultural land area that has achieved an acceptable or desirable level of risk mitigation mechanisms [2.4.1]
+AG_LND_SDGRD,,Proportion of agricultural land area that has achieved an acceptable or desirable level of soil degradation [2.4.1]
+AG_LND_SUST,,Proportion of agricultural area under productive and sustainable agriculture [2.4.1]
+AG_LND_SUST_PRXCSS,,"[PROXY] Progress toward productive and sustainable agriculture, current status score [2.4.1]"
+AG_LND_SUST_PRXTS,,"[PROXY] Progress toward productive and sustainable agriculture, trend score [2.4.1]"
+AG_PRD_AGVAS,,Agriculture value added share of GDP [2.a.1]
+AG_PRD_ORTIND,,Agriculture orientation index for government expenditures [2.a.1]
+AG_XPD_AGSGB,,Agriculture share of Government Expenditure [2.a.1]
+EG_ACS_ELEC,,Proportion of population with access to electricity [7.1.1]
+EG_EGY_RNEW,,"Installed renewable electricity-generating capacity (watts per capita) [7.b.1, 12.a.1]"
+EG_FEC_RNEW,,Renewable energy share in the total final energy consumption [7.2.1]
+EN_WWT_GEN,,Total wastewater generated (million m3/year) [6.3.1]
+EN_WWT_TREAT,,Total wastewater treated (million m3/year) [6.3.1]
+EN_WWT_TREATR,,Proportion of wastewater treated [6.3.1]
+EN_WWT_WWDS,,Proportion of safely treated domestic wastewater flows [6.3.1]
+ER_GRF_ANIMKPT,,Number of local breeds kept in the country [2.5.1]
+ER_GRF_ANIMKPT_TRB,,Number of transboundary breeds (including extinct ones) [2.5.1]
+ER_GRF_ANIMRCNTN,,Number of local breeds for which sufficient genetic resources are stored for reconstitution [2.5.1]
+ER_GRF_ANIMRCNTN_TRB,,Number of transboundary breeds for which sufficient genetic resources are stored for reconstitution [2.5.1]
+ER_GRF_PLNTSTOR,,Plant genetic resources accessions stored ex situ (number) [2.5.1]
+FB_BNK_ACCSS,,Proportion of adults (15 years and older) with an account at a financial institution or mobile-money-service provider [8.10.2]
+GF_XPD_GBPC,,Primary government expenditures as a proportion of original approved budget [16.6.1]
+IC_GEN_MGTL,,Proportion of women in managerial positions - 13th ICLS (%) [5.5.2]
+IC_GEN_MGTL_19ICLS,,Proportion of women in managerial positions - 19th ICLS (%) [5.5.2]
+IC_GEN_MGTN,,Proportion of women in senior and middle management positions - 13th ICLS (%) [5.5.2]
+IC_GEN_MGTN_19ICLS,,Proportion of women in senior and middle management positions - 19th ICLS (%) [5.5.2]
+IT_MOB_2GNTWK,,Proportion of population covered by at least a 2G mobile network [9.c.1]
+IT_MOB_3GNTWK,,Proportion of population covered by at least a 3G mobile network [9.c.1]
+IT_MOB_4GNTWK,,Proportion of population covered by at least a 4G mobile network [9.c.1]
+IT_MOB_5GNTWK,,Proportion of population covered by at least a 5G mobile network [9.c.1]
+IT_MOB_OWN,,Proportion of individuals who own a mobile telephone [5.b.1]
+NY_GDP_PCAP,,Annual growth rate of real GDP per capita [8.1.1]
+SD_MDP_ANDI,,Average proportion of deprivations for people multidimensionally poor [1.2.2]
+SD_MDP_MUHC,,Proportion of population living in multidimensional poverty [1.2.2]
+SE_ACC_HNDWSH,,"Proportion of schools with basic handwashing facilities, by education level [4.a.1]"
+SE_ACS_CMPTR,,"Proportion of schools with access to computers for pedagogical purposes, by education level [4.a.1]"
+SE_ACS_ELECT,,"Proportion of schools with access to electricity, by education level [4.a.1]"
+SE_ACS_H2O,,"Proportion of schools with access to basic drinking water, by education level [4.a.1]"
+SE_ACS_INTNT,,"Proportion of schools with access to the internet for pedagogical purposes, by education level [4.a.1]"
+SE_ACS_SANIT,,"Proportion of schools with access to single-sex basic sanitation, by education level [4.a.1]"
+SE_ADT_AGP_LITR,,Adjusted gender parity index for youth/adult literacy rate (ratio) [4.5.1]
+SE_ADT_ALP_LITR,,Adjusted location parity index for youth/adult literacy rate (ratio) [4.5.1]
+SE_ADT_AMP_LITR,,Adjusted immigration status parity index for youth/adult literacy rate [4.5.1]
+SE_ADT_AWP_LITR,,Adjusted wealth parity index for youth/adult literacy rate (ratio) [4.5.1]
+SE_ADT_EDUCTRN,,Participation rate in formal and non-formal education and training [4.3.1]
+SE_ADT_LITR,,Youth/adult literacy rate [4.6.1]
+SE_AGP_CPRA,,"Adjusted gender parity index for completion rate, by sex, location, wealth quintile and education level [4.5.1]"
+SE_ALP_CPLR,,"Adjusted location parity index for completion rate, by sex, location, wealth quintile and education level [4.5.1]"
+SE_AWP_CPRA,,"Adjusted wealth parity index for completion rate, by sex, location, wealth quintile and education level [4.5.1]"
+SE_GPI_PART,,Adjusted gender parity index for participation rate in formal and non-formal education and training (ratio) [4.5.1]
+SE_GPI_PTNPRE,,"Adjusted gender parity index for participation rate in organized learning (one year before the official primary entry age), (ratio) [4.5.1]"
+SE_GPI_TCAQ,,"Adjusted gender parity index for the proportion of teachers with the minimum required qualifications, by education level (ratio) [4.5.1]"
+SE_INF_DSBL,,Proportion of schools with access to adapted infrastructure and materials for students with disabilities [4.a.1]
+SE_PRE_PARTN,,Participation rate in organized learning (one year before the official primary entry age) [4.2.2]
+SE_SGE_BIODIV,,"Score on greening education in biodiversity [4.7.1,12.8.1,13.3.1]"
+SE_SGE_CLIMCH,,"Score on greening education in climate change [4.7.1,12.8.1,13.3.1]"
+SE_SGE_ENVSUST,,"Score on greening education in environment and sustainability [4.7.1,12.8.1,13.3.1]"
+SE_SGE_OVERALL,,"Score on greening education in environment and sustainability, climate change, and biodiversity [4.7.1,12.8.1,13.3.1]"
+SE_TOT_PRFL,,Proportion of children and young people achieving a minimum proficiency level in reading and mathematics [4.1.1]
+SE_TRA_GRDL,,"Proportion of teachers with the minimum required qualifications, by education level and sex [4.c.1]"
+SG_CPA_MIGRS,,"Countries with migration policies to facilitate orderly, safe, regular and responsible migration and mobility of people, by policy domain (1 = Requires further progress; 2 = Partially meets; 3 = Meets; 4 = Fully meets) [10.7.2]"
+SG_DMK_JDC,,Proportions of positions in the judiciary compared to national distributions [16.7.1]
+SG_DMK_JDC_CNS,,"Proportions of positions in the judiciary compared to national distributions, Constitutional Court [16.7.1]"
+SG_DMK_JDC_HGR,,"Proportions of positions in the judiciary compared to national distributions, Higher Courts [16.7.1]"
+SG_DMK_JDC_LWR,,"Proportions of positions in the judiciary compared to national distributions, Lower Courts [16.7.1]"
+SG_DMK_PARLCC_LC,,"Number of chairs of permanent committees, by age, sex and focus of the committee, Lower Chamber or Unicameral [16.7.1]"
+SG_DMK_PARLMP_LC,,"Ratio for female members of parliaments (Ratio of the proportion of women in parliament in the proportion of women in the national population with the age of eligibility as a lower bound boundary), Lower Chamber or Unicameral [16.7.1]"
+SG_DMK_PARLSP_LC,,"Number of speakers in parliament, by age and sex , Lower Chamber or Unicameral [16.7.1]"
+SG_DMK_PARLYTHN_LC,,"Number of youth in parliament, Lower Chamber or Unicameral [16.7.1]"
+SG_DMK_PARLYTHP_LC,,"Proportion of youth in parliament, Lower Chamber or Unicameral [16.7.1]"
+SG_DMK_PARLYTHR_LC,,"Ratio of young members in parliament (Ratio of the proportion of young members in parliament in the proportion of the national population with the age of eligibility as a lower bound boundary), Lower Chamber or Unicameral [16.7.1]"
+SG_DMK_PSRVC,,Proportions of positions in the public service compared to national distributions [16.7.1]
+SG_GEN_LOCGELS,,Proportion of elected seats held by women in deliberative bodies of local government [5.5.1]
+SG_GEN_PARL,,Proportion of seats held by women in national parliaments (% of total number of seats) [5.5.1]
+SG_GEN_PARLN,,Number of seats held by women in national parliaments [5.5.1]
+SG_GEN_PARLNT,,Current number of seats in national parliaments [5.5.1]
+SG_INF_ACCSS,,"Countries that adopt and implement constitutional, statutory and/or policy guarantees for public access to information [16.10.2]"
+SG_REG_BRTH,,Proportion of children under 5 years of age whose births have been registered with a civil authority [16.9.1]
+SG_REG_BRTH90N,,Countries with birth registration data that are at least 90 percent complete (1 = YES; 0 = NO) [17.19.2]
+SG_REG_DETH75N,,Countries with death registration data that are at least 75 percent complete (1 = YES; 0 = NO) [17.19.2]
+SH_ACS_UNHC_25,,"Universal health coverage (UHC) service coverage index, 2025 methodology [3.8.1]"
+SH_ALC_CONSPT,,Alcohol consumption per capita (aged 15 years and older) within a calendar year [3.5.2]
+SH_DTH_NCOM,,"Mortality rate attributed to cardiovascular disease, cancer, diabetes or chronic respiratory disease [3.4.1]"
+SH_DYN_IMRT,,Infant mortality rate [3.2.1]
+SH_DYN_IMRTN,,Infant deaths (number) [3.2.1]
+SH_DYN_MORT,,Under-five mortality rate [3.2.1]
+SH_DYN_MORTN,,Under-five deaths (number) [3.2.1]
+SH_DYN_NMRT,,Neonatal mortality rate [3.2.2]
+SH_DYN_NMRTN,,Neonatal deaths (number) [3.2.2]
+SH_FPL_INFM,,"Proportion of women who make their own informed decisions regarding sexual relations, contraceptive use and reproductive health care (% of women aged 15-49 years) [5.6.1]"
+SH_FPL_INFMCU,,Proportion of women who make their own informed decisions regarding contraceptive use (% of women aged 15-49 years) [5.6.1]
+SH_FPL_INFMRH,,Proportion of women who make their own informed decisions regarding reproductive health care (% of women aged 15-49 years) [5.6.1]
+SH_FPL_INFMSR,,Proportion of women who make their own informed decisions regarding sexual relations (% of women aged 15-49 years) [5.6.1]
+SH_FPL_MTMM,,Proportion of women of reproductive age (aged 15-49 years) who have their need for family planning satisfied with modern methods [3.7.1]
+SH_H2O_SAFE,,Proportion of population using safely managed drinking water services [6.1.1]
+SH_IHR_CAPS,,"International Health Regulations (IHR) capacity, by type of IHR capacity [3.d.1]"
+SH_MED_DEN,,"Health worker density, by type of occupation (per 10,000 population) [3.c.1]"
+SH_MED_HWRKDIS,,"Health worker distribution, by sex and type of occupation [3.c.1]"
+SH_PRV_SMOK,,Age-standardized prevalence of current tobacco use among persons aged 15 years and older [3.a.1]
+SH_SAN_DEFECT,,Proportion of population practicing open defecation [6.2.1]
+SH_SAN_HNDWSH,,Proportion of population with basic handwashing facilities on premises [6.2.1]
+SH_SAN_SAFE,,Proportion of population using safely managed sanitation services [6.2.1]
+SH_STA_BRTC,,Proportion of births attended by skilled health personnel [3.1.2]
+SH_STA_MALR,,"Malaria incidence per 1,000 population at risk [3.3.3]"
+SH_STA_MORT,,Maternal mortality ratio [3.1.1]
+SH_STA_STNT,,Proportion of children moderately or severely stunted [2.2.1]
+SH_STA_STNTN,,Children moderately or severely stunted (number) [2.2.1]
+SH_STA_WASHARI,,"Mortality rate attributed to unsafe water, unsafe sanitation and lack of hygiene from diarrhoea, intestinal nematode infections, malnutrition and acute respiratory infections [3.9.2]"
+SH_STA_WAST,,Proportion of children moderately or severely wasted [2.2.2]
+SH_STA_WASTN,,Children moderately or severely wasted (number) [2.2.2]
+SH_TBS_INCD,,Tuberculosis incidence [3.3.2]
+SH_TRP_INTVN,,Number of people requiring interventions against neglected tropical diseases [3.3.5]
+SI_AGR_LSFP,,Average income of large-scale food producers [2.3.2]
+SI_AGR_SSFP,,Average income of small-scale food producers [2.3.2]
+SI_COV_BENFTS,,Proportion of population covered by at least one social protection benefit [1.3.1]
+SI_COV_CHLD,,Proportion of children/households receiving child/family cash benefit [1.3.1]
+SI_COV_DISAB,,Proportion of population with severe disabilities receiving disability cash benefit [1.3.1]
+SI_COV_MATNL,,Proportion of mothers with newborns receiving maternity cash benefit [1.3.1]
+SI_COV_PENSN,,Proportion of population above statutory pensionable age receiving a pension [1.3.1]
+SI_COV_POOR,,Proportion of poor population receiving social assistance cash benefit [1.3.1]
+SI_COV_SOCAST,,Proportion of population covered by social assistance programs [1.3.1]
+SI_COV_SOCINS,,Proportion of population covered by social insurance programs [1.3.1]
+SI_COV_UEMP,,Proportion of unemployed persons receiving unemployment cash benefit [1.3.1]
+SI_COV_VULN,,Proportion of vulnerable population receiving social assistance cash benefit [1.3.1]
+SI_COV_WKINJRY,,Proportion of employed population covered in the event of work injury [1.3.1]
+SI_HEI_TOTL,,Growth rates of household expenditure or income per capita [10.1.1]
+SI_POV_50MI,,Proportion of people living below 50 percent of median income [10.2.1]
+SI_POV_DAY1,,Proportion of population below international poverty line [1.1.1]
+SI_POV_NAHC,,Proportion of population living below the national poverty line [1.2.1]
+SI_RMT_COST,,Average remittance costs of sending $200 to a receiving country as a proportion of the amount remitted [10.c.1]
+SL_DOM_TSPD,,Proportion of time spent on unpaid domestic chores and care work [5.4.1]
+SL_DOM_TSPDCW,,Proportion of time spent on unpaid care work [5.4.1]
+SL_DOM_TSPDDC,,Proportion of time spent on unpaid domestic chores [5.4.1]
+SL_EMP_EARN,,Average hourly earnings [8.5.1]
+SL_EMP_GTOTL,,Labour share of GDP [10.4.1]
+SL_ISV_IFEM,,"Proportion of informal employment, by sector and sex - 13th ICLS [8.3.1]"
+SL_ISV_IFEM_19ICLS,,"Proportion of informal employment, by sector and sex - 19th ICLS [8.3.1]"
+SL_TLF_MANF,,Manufacturing employment as a proportion of total employment - 13th ICLS (%) [9.2.2]
+SL_TLF_MANF_19ICLS,,Manufacturing employment as a proportion of total employment - 19th ICLS(%) [9.2.2]
+SL_TLF_NEET,,"Proportion of youth not in education, employment or training, by sex and age - 13th ICLS (%) [8.6.1]"
+SL_TLF_NEET_19ICLS,,"Proportion of youth not in education, employment or training, by sex and age - 19th ICLS (%) [8.6.1]"
+SL_TLF_UEM,,"Unemployment rate, by sex and age - 13th ICLS (%) [8.5.2]"
+SL_TLF_UEM_19ICLS,,"Unemployment rate, by sex and age - 19th ICLS (%) [8.5.2]"
+SL_TLF_UEMDIS,,"Unemployment rate, by sex and disability - 13th ICLS (%) [8.5.2]"
+SL_TLF_UEMDIS_19ICLS,,"Unemployment rate, by sex and disability - 19th ICLS (%) [8.5.2]"
+SN_ITK_DEFC,,Prevalence of undernourishment [2.1.1]
+SN_ITK_DEFCN,,Number of undernourish people [2.1.1]
+SN_STA_OVWGT,,Proportion of children moderately or severely overweight [2.2.2]
+SN_STA_OVWGTN,,Children moderately or severely overweight (number) [2.2.2]
+SP_ACS_BSRVH2O,,Proportion of population using basic drinking water services [1.4.1]
+SP_ACS_BSRVSAN,,Proportion of population using basic sanitation services [1.4.1]
+SP_DYN_ADKL,,"Adolescent birth rate (per 1,000 women aged 15-19 and 10-14 years) [3.7.2]"
+SP_DYN_MRBF15,,Proportion of women aged 20-24 years who were married or in a union before age 15 [5.3.1]
+SP_DYN_MRBF18,,Proportion of women aged 20-24 years who were married or in a union before age 18 [5.3.1]
+ST_EMP_TRSMN,,Employed persons in the tourism industries (number) [8.9.2]
+ST_GDP_ZS,,Tourism direct GDP as a proportion of total GDP [8.9.1]
+VC_PRR_PHY_VIO,,"Police reporting rate for physical violence in the previous 12 months, by sex (%) [16.3.1]"
+VC_PRR_PHYV,,"Police reporting rate for physical assault in the previous 12 months, by sex (%) [16.3.1]"
+VC_PRR_ROBB,,"Police reporting rate for robbery in the previous 12 months, by sex (%) [16.3.1]"
+VC_VAW_MARR,,Proportion of ever-partnered women and girls subjected to physical and/or sexual violence by a current or former intimate partner in the previous 12 months [5.2.1]
+VC_VAW_NONMARR,,Proportion of women and girls aged 15 years and older subjected to sexual violence by persons other than an intimate partner in the previous 12 months [5.2.2]
+VC_VOV_PHY_ASLT,,"Proportion of population subjected to physical assault in the previous 12 months, by sex (%) [16.1.3]"
+VC_VOV_PHYL,,Proportion of population subjected to physical violence in the previous 12 months [16.1.3]
+VC_VOV_ROBB,,Proportion of population subjected to robbery in the previous 12 months [16.1.3]
