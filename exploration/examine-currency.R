@@ -41,7 +41,6 @@ latest <- pacstat_pdo1_snapshot |>
     commodity
   ) |>
   summarise(
-    latest_obs = max(year),
     latest_date = max(obs_date),
     .groups = "drop"
   )
@@ -93,31 +92,26 @@ all_combos <- latest |>
   ) |>
   mutate(
     # if there's no data, we say the latest observation was in year zero:
-    latest_obs = replace_na(latest_obs, 0),
-    latest_date = replace_na(latest_date, as.Date("1900-01-01")),
-    target_year = if_else(
-      combined_series == "IDX cpi",
-      year(Sys.Date()),
-      year(Sys.Date()) - 5
-    ),
+    latest_date = replace_na(latest_date, as.Date("1000-01-01")),
     target_date = if_else(
       combined_series == "IDX cpi",
       ymd(Sys.Date() - 120),
-      ymd(Sys.Date() - 5 * 365.25)
+      ymd(paste0(year(Sys.Date()) - 5, "-01-01"))
     )
   )
 
 #-------------------------what are the results - how many indicators are current and how many not?------------------
 glimpse(all_combos)
+arrange(all_combos, latest_date)
 
 
 # In total:
 currency_total <- all_combos |>
   summarise(
     number_possible = n(),
-    number_present = sum(latest_obs > 0),
-    number_current = sum(latest_obs >= target_year),
-    prop_current = mean(latest_obs >= target_year)
+    number_present = sum(latest_date > as.Date("1500-01-01")),
+    number_current = sum(latest_date >= target_date),
+    prop_current = mean(latest_date >= target_date)
   )
 
 # By country:
@@ -125,9 +119,9 @@ currency_country <- all_combos |>
   group_by(combined_country) |>
   summarise(
     number_possible = n(),
-    number_present = sum(latest_obs > 0),
-    number_current = sum(latest_obs >= target_year),
-    prop_current = mean(latest_obs >= target_year)
+    number_present = sum(latest_date > "1500-01-01"),
+    number_current = sum(latest_date >= target_date),
+    prop_current = mean(latest_date >= target_date)
   ) |>
   arrange(desc(prop_current))
 
