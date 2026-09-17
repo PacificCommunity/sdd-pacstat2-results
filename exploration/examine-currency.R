@@ -36,12 +36,15 @@ latest <- pacstat_pdo1_snapshot |>
     sex,
     age,
     urbanisation,
-    urbanization,
     disability_status,
     economic_sector,
     commodity
   ) |>
-  summarise(latest_obs = max(year), .groups = "drop")
+  summarise(
+    latest_obs = max(year),
+    latest_date = max(obs_date),
+    .groups = "drop"
+  )
 
 # we want all the combinations of sex, age, other composite breakdowns, and
 # series that actually exist::
@@ -51,7 +54,6 @@ valid_combos <- latest |>
     sex,
     age,
     urbanisation,
-    urbanization,
     disability_status,
     economic_sector,
     commodity
@@ -84,7 +86,6 @@ all_combos <- latest |>
       "sex",
       "age",
       "urbanisation",
-      "urbanization",
       "disability_status",
       "economic_sector",
       "commodity"
@@ -93,18 +94,34 @@ all_combos <- latest |>
   mutate(
     # if there's no data, we say the latest observation was in year zero:
     latest_obs = replace_na(latest_obs, 0),
-    target_year = ifelse(
+    latest_date = replace_na(latest_date, as.Date("1900-01-01")),
+    target_year = if_else(
       combined_series == "IDX cpi",
       year(Sys.Date()),
       year(Sys.Date()) - 5
+    ),
+    target_date = if_else(
+      combined_series == "IDX cpi",
+      ymd(Sys.Date() - 120),
+      ymd(Sys.Date() - 5 * 365.25)
     )
   )
 
-
 #-------------------------what are the results - how many indicators are current and how many not?------------------
+glimpse(all_combos)
+
+
+# In total:
+currency_total <- all_combos |>
+  summarise(
+    number_possible = n(),
+    number_present = sum(latest_obs > 0),
+    number_current = sum(latest_obs >= target_year),
+    prop_current = mean(latest_obs >= target_year)
+  )
 
 # By country:
-all_combos |>
+currency_country <- all_combos |>
   group_by(combined_country) |>
   summarise(
     number_possible = n(),
@@ -114,11 +131,25 @@ all_combos |>
   ) |>
   arrange(desc(prop_current))
 
-# In total:
-all_combos |>
-  summarise(
-    number_possible = n(),
-    number_present = sum(latest_obs > 0),
-    number_current = sum(latest_obs >= target_year),
-    prop_current = mean(latest_obs >= target_year)
+currency_target <- 0.38
+
+currency_country |>
+  ggplot(aes(x = number_present, y = prop_current)) +
+  # average line
+  geom_hline(yintercept = currency_total$prop_current, colour = "darkred") +
+  geom_hline(yintercept = currency_target, colour = "darkred") +
+  geom_point(colour = spc_cols(2)) +
+  geom_text_repel(
+    aes(label = combined_country),
+    colour = spc_cols(1),
+    seed = 42
+  ) +
+  scale_y_continuous(label = percent) +
+  expand_limits(y = 0:1, x = max(currency_country$number_possible)) +
+  theme_minimal() +
+  labs(
+    x = "Number of actual indicators available in PDH.Stat",
+    y = "Proportion of all indicators that are 'current'",
+    title = "A new target for IDA countries - 38% of indicators 'current' by 2032",
+    subtitle = "Current usually means 5 years old or less"
   )
