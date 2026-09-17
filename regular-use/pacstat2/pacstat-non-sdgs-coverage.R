@@ -51,7 +51,8 @@ disability <- readSDMX(
   # cut-offs, etc. we only care about the number of combinations of country, time,
   # sex, age and urbanisation; not that there is a vector of values for each some
   # combination
-  distinct(geo_pict, freq, sex, age, urbanization, obs_time)
+  rename(urbanisation = urbanization) |>
+  distinct(geo_pict, freq, sex, age, urbanisation, obs_time)
 
 #-----------4. participating labour force, employed, etc------
 #
@@ -66,7 +67,8 @@ labour_stats <- readSDMX(
   as_tibble() |>
   clean_names() |>
   filter(geo_pict %in% ida_picts) |>
-  distinct(freq, geo_pict, indicator, sex, age, urbanization, obs_time)
+  rename(urbanisation = urbanization) |>
+  distinct(freq, geo_pict, indicator, sex, age, urbanisation, obs_time)
 
 #-----------5. births and deaths----------------- We have a couple of sources of
 # these
