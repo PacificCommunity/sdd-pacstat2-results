@@ -126,6 +126,7 @@ currency_country <- all_combos |>
   arrange(desc(prop_current))
 
 currency_target <- 0.38
+mi <- max(currency_country$number_possible)
 
 currency_country |>
   ggplot(aes(x = number_present, y = prop_current)) +
@@ -139,7 +140,7 @@ currency_country |>
     seed = 42
   ) +
   scale_y_continuous(label = percent) +
-  expand_limits(y = 0:1, x = max(currency_country$number_possible)) +
+  expand_limits(y = 0:1, x = mi) +
   theme_minimal() +
   labs(
     x = "Number of actual indicators available in PDH.Stat",
@@ -147,3 +148,34 @@ currency_country |>
     title = "A new target for IDA countries - 38% of indicators 'current' by 2032",
     subtitle = "Current usually means 5 years old or less"
   )
+
+
+p2 <- currency_country |>
+  ggplot(aes(x = number_present, y = number_current)) +
+  geom_hline(yintercept = currency_target * mi, colour = "darkred") +
+  geom_point(colour = spc_cols(2), size = 4) +
+  geom_text_repel(
+    aes(label = combined_country),
+    colour = spc_cols(1),
+    seed = 42,
+    size = 5
+  ) +
+  annotate(
+    "text",
+    x = 200,
+    y = currency_target * mi + 20,
+    label = "2032 target for recent data to be available",
+    colour = "darkred"
+  ) +
+  expand_limits(y = c(0, mi), x = c(0, mi)) +
+  labs(
+    x = "Number of actual indicators available in PDH.Stat",
+    y = "Number that are 'current'",
+    title = "A new target for IDA countries - 38% of indicators 'current' by 2032",
+    subtitle = "Current usually 5 years old or less for most indicators; 3 months for CPI."
+  ) +
+  coord_equal()
+
+svg("output/currency-by-country.svg", width = 8, height = 8)
+print(p2)
+dev.off()
