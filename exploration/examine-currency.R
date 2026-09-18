@@ -128,7 +128,7 @@ currency_country <- all_combos |>
 currency_target <- 0.38
 mi <- max(currency_country$number_possible)
 
-currency_country |>
+p1 <- currency_country |>
   ggplot(aes(x = number_present, y = prop_current)) +
   # average line
   geom_hline(yintercept = currency_total$prop_current, colour = "darkred") +
@@ -141,13 +141,16 @@ currency_country |>
   ) +
   scale_y_continuous(label = percent) +
   expand_limits(y = 0:1, x = mi) +
-  theme_minimal() +
   labs(
     x = "Number of actual indicators available in PDH.Stat",
     y = "Proportion of all indicators that are 'current'",
     title = "A new target for IDA countries - 38% of indicators 'current' by 2032",
     subtitle = "Current usually means 5 years old or less"
   )
+
+svg("output/currency-by-country-proportion.svg", width = 8, height = 6)
+print(p1)
+dev.off()
 
 
 p2 <- currency_country |>
@@ -158,7 +161,7 @@ p2 <- currency_country |>
     aes(label = combined_country),
     colour = spc_cols(1),
     seed = 42,
-    size = 5
+    size = 4
   ) +
   annotate(
     "text",
@@ -169,13 +172,27 @@ p2 <- currency_country |>
   ) +
   expand_limits(y = c(0, mi), x = c(0, mi)) +
   labs(
-    x = "Number of actual indicators available in PDH.Stat",
+    x = "Number of actual indicators available in PDH.Stat\n(out of 803 potential indicators as at late 2026)",
     y = "Number that are 'current'",
     title = "A new target for IDA countries - 38% of indicators 'current' by 2032",
-    subtitle = "Current usually 5 years old or less for most indicators; 3 months for CPI."
+    subtitle = "'Current' usually 5 years old or less for most indicators; 3 months for CPI.",
+    caption = "Source: SPC analysis using PDH.Stat"
   ) +
   coord_equal()
 
-svg("output/currency-by-country.svg", width = 8, height = 8)
+svg("output/currency-by-country.svg", width = 6, height = 6.5)
 print(p2)
 dev.off()
+
+
+#--------------------------by indicator type--------------
+all_combos |>
+  mutate(series_type = gsub(".*\\s", "", combined_series)) |>
+  group_by(series_type) |>
+  summarise(
+    number_possible = n(),
+    number_present = sum(latest_date > "1500-01-01"),
+    number_current = sum(latest_date >= target_date),
+    prop_current = mean(latest_date >= target_date)
+  ) |>
+  arrange(desc(number_possible))
