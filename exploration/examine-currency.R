@@ -66,6 +66,26 @@ valid_combos <- latest |>
     expand.grid(combined_series = "migration", sex = c("_T", "M", "F"))
   )
 
+# note that this includes only valid combinations, not a full cross join of all
+# dimensions. For example we have poverty by age, poverty by sex, poverty by
+# urbanisatio, but not poverty by age and sex at once:
+filter(valid_combos, combined_series == "SI_POV_DAY1 sdgs")
+
+# A version of this for public / explanatory use, and which we will track in
+# GitHub  because it should only change slowly if at all over time:
+valid_combos |>
+  count(combined_series) |>
+  mutate(
+    indicator = gsub(" sdgs$", "", combined_series),
+    indicator = gsub("^NA ", "", indicator)
+  ) |>
+  left_join(sdg_series_codelist, by = c("indicator" = "series_id")) |>
+  mutate(label = replace_na(label, "")) |>
+  select(indicator, n, label) |>
+  arrange(desc(n)) |>
+  write_csv("output/indicator_list.csv")
+
+
 # and we want all the countries that exist:
 countries <- latest |>
   distinct(combined_country)
