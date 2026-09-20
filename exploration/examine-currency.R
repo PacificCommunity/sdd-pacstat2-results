@@ -184,6 +184,29 @@ svg("output/currency-by-country.svg", width = 6, height = 6.5)
 print(p2)
 dev.off()
 
+# variant without such an emphasis on the target
+p2a <- currency_country |>
+  ggplot(aes(x = number_present, y = number_current)) +
+  geom_point(colour = spc_cols(2), size = 4) +
+  geom_text_repel(
+    aes(label = combined_country),
+    colour = spc_cols(1),
+    seed = 42,
+    size = 4
+  ) +
+  expand_limits(y = c(0, mi), x = c(0, mi)) +
+  labs(
+    x = "Number of actual indicators available in PDH.Stat\n(out of 803 potential indicators as at late 2026)",
+    y = "Number that are 'current'",
+    title = "We have more data available than before, but a lot of it is not 'current'",
+    subtitle = "'Current' usually 5 years old or less for most indicators; 3 months for CPI.",
+    caption = "Source: SPC analysis using PDH.Stat"
+  ) +
+  coord_equal()
+
+svg("output/currency-by-country-no-target.svg", width = 6, height = 6.5)
+print(p2a)
+dev.off()
 
 #--------------------------by indicator type--------------
 all_combos |>
