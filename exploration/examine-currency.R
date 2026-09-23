@@ -71,6 +71,8 @@ valid_combos <- latest |>
 # urbanisatio, but not poverty by age and sex at once:
 filter(valid_combos, combined_series == "SI_POV_DAY1 sdgs")
 
+# filter(valid_combos, grepl("disability", combined_series)) |> View()
+
 # A version of this for public / explanatory use, and which we will track in
 # GitHub  because it should only change slowly if at all over time:
 valid_combos |>
@@ -216,7 +218,7 @@ p2a <- currency_country |>
   ) +
   expand_limits(y = c(0, mi), x = c(0, mi)) +
   labs(
-    x = "Number of actual indicators available in PDH.Stat\n(out of 803 potential indicators as at late 2026)",
+    x = "Number of actual indicators available in PDH.Stat\n(out of 803 'core statistics')",
     y = "Number that are 'current'",
     title = "We have more data available than before, but a lot of it is not 'current'",
     subtitle = "'Current' usually 5 years old or less for most indicators; 3 months for CPI.",
