@@ -90,8 +90,10 @@ pacstat_pdo1_snapshot <- bind_rows(
   # Caution - obs_time is sometimes a four character year, and sometimes a 7
   # character year-month eg "2026-10" (that is for monthly CPI) and sometimes
   # "2025-Q4". But the first four characters are always year (so far...)
-  mutate(year = as.numeric(substring(obs_time, 1, 4))) |>
-  glimpse()
+  mutate(
+    year = as.numeric(substring(obs_time, 1, 4)),
+    obs_date = flexi_date(obs_time)
+  )
 
 # This data is largish and not of enough interest to compare at different points
 # in time so we are going to save it as a binary object and have Git ignore it.
